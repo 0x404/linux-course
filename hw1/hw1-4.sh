@@ -17,6 +17,7 @@ analyse() {
         read_count=$(expr $read_count + 1)
         if [ $read_count == '1' ]
         then
+            # 第一次读取元素时初始化最小值和最大值
             max_value=$line
             min_value=$line
         else
@@ -28,6 +29,8 @@ analyse() {
         fi
         sum_value=$(echo "scale=2; $sum_value + $line" | bc)
     done < $1
+
+    # 输出结果
     echo "max_value=$max_value"
     echo "min_value=$min_value"
     echo "avg_value=$(echo "scale=2; $sum_value / $read_count" | bc)"

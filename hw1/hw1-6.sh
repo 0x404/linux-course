@@ -9,7 +9,7 @@
  #          - hw1-6.sh  （输出问候信息）
 ### 
 
-current=$(date +%H)
+current=$(date +%H) # 获取当前时间（小时）
 if [ $current -ge 0 -a $current -lt 12 ]
 then
     greet="good morning"
@@ -21,4 +21,3 @@ else
 fi
 
 echo "$greet! $USER, today is $(date +%A)."
-# 输出：good morning! zengqunhong, today is Thursday.

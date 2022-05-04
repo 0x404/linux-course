@@ -10,12 +10,13 @@
 ### 
 
 sentence="I am oldboy teacher welcome to oldboy training class"
-sentence=($sentence)    # 转成数组
-sentence_len=${#sentence[*]}
+sentence=($sentence)            # 转成数组
+sentence_len=${#sentence[*]}    # 获取数组长度
 
 for ((i=0; i<$sentence_len; ++i))
 do
-    if [[ ${#sentence[i]} -le 6 ]]  # 逐个判断
+    # 逐个判断数组元素是否符合
+    if [[ ${#sentence[i]} -le 6 ]]
     then
         echo ${sentence[i]}
     fi

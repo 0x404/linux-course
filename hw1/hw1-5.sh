@@ -43,5 +43,6 @@ done
 
 if [ $ok == 0 ]
 then
+    # 如果没有找到任何文件，则输出find nothing
     echo "[hw1-5.sh]: find nothing."
 fi
