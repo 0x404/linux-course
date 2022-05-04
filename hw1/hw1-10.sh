@@ -13,11 +13,11 @@ echo "enter username to check:"
 read USERNAME
 while :
 do
-    find=0
     # who命令显示当前系统登录用户
     # 格式为：zengqunhong   pts/1   2022-04-21  08:04   (tmux(999224).%0)
     # 使用awk获得第一列的用户名，然后排序去重，得到当前系统登录的全部用户名
     # 在当前系统登录的全部用户名中查找指定用户名
+    find=0
     for u in $(who | awk '{print $1}' | sort | uniq)
     do
         if [ $u == $USERNAME ]
