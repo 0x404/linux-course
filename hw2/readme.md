@@ -55,7 +55,10 @@
 下载源码后，进入文件目录，文件结构如下：
 
 ```
+.
 ├── Makefile
+├── readme.md
+├── readme.pdf
 └── src
     ├── my_cp.c
     ├── my_cp.h
@@ -84,6 +87,8 @@ make
 │   ├── my_rm.o
 │   ├── utils.o
 │   └── zsh.o
+├── readme.md
+├── readme.pdf
 └── src
     ├── my_cp.c
     ├── my_cp.h
