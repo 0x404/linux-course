@@ -10,6 +10,8 @@
 #include <fcntl.h>
 #include <utime.h>
 
+#define KGRN "\x1B[32m"
+#define RESET "\x1B[0m"
 #define SUCCESSID 0
 #define FAILEDID 1
 #define HISTORYBUFFER 1024
@@ -48,6 +50,30 @@ int (*shell_function[]) (char **) = {
 
 char history[HISTORYBUFFER][COMMANDBUFFER];
 int history_head = 0, history_tail = 0;
+
+int is_dir(char *path)
+{
+    struct stat fileinfo;
+    stat(path, &fileinfo);
+    if (S_ISDIR(fileinfo.st_mode)) return 1;
+    return 0;
+}
+
+int is_file(char *path)
+{
+    struct stat fileinfo;
+    return (stat(path, &fileinfo) == 0);
+}
+
+char *next_dir(char *current, char *nex)
+{
+    char *res = (char*)malloc(256 * sizeof(char));
+    strcpy(res, current);
+    strcat(res, "/");
+    strcat(res, nex);
+    return res;
+}
+
 
 char *read_line()
 {
@@ -120,7 +146,7 @@ int my_ls(char **args)
     
     if (args[3] != NULL || (args[2] != NULL && strcmp(args[2], "-a")))
     {
-        printf("> ls parameter error.\n");
+        printf("ls: parameter error.\n");
         return FAILEDID;
     }
     
@@ -129,7 +155,7 @@ int my_ls(char **args)
     struct dirent *file;
     if (!(dir = opendir(args[1])))
     {
-        printf("> failed in opening directory\n");
+        printf("ls: failed in opening directory\n");
         return FAILEDID;
     }
     else
@@ -142,7 +168,15 @@ int my_ls(char **args)
                 if (args[2] == NULL || strcmp(args[2], "-a"))
                     continue;
             }
-            printf("%s  ", file->d_name);
+            if (is_dir(next_dir(args[1], file->d_name)))
+            {
+                printf(KGRN "%s  " RESET, file->d_name);
+            }
+            else
+            {
+                printf("%s  ", file->d_name);
+            }
+            
         }
         printf("\n");
     }
@@ -216,29 +250,6 @@ int my_mkdir(char **args)
         return FAILEDID;
     }
     return SUCCESSID;
-}
-
-int is_dir(char *path)
-{
-    struct stat fileinfo;
-    stat(path, &fileinfo);
-    if (S_ISDIR(fileinfo.st_mode)) return 1;
-    return 0;
-}
-
-int is_file(char *path)
-{
-    struct stat fileinfo;
-    return (stat(path, &fileinfo) == 0);
-}
-
-char *next_dir(char *current, char *nex)
-{
-    char *res = (char*)malloc(256 * sizeof(char));
-    strcpy(res, current);
-    strcat(res, "/");
-    strcat(res, nex);
-    return res;
 }
 
 
@@ -551,6 +562,7 @@ void zsh()
     {
         printf("root@zsh:$ ");
         char *line = read_line();
+        if (line == NULL) continue;
         update_history(line);
 
         char **args = parse_line(line);
