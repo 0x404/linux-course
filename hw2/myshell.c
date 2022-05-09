@@ -14,6 +14,7 @@
 #define FAILEDID 1
 #define HISTORYBUFFER 1024
 #define COMMANDBUFFER 128
+#define ARGUMENTBUFFER 20
 
 int my_ls(char **args);
 int my_pwd(char **args);
@@ -46,7 +47,60 @@ int (*shell_function[]) (char **) = {
 };
 
 char history[HISTORYBUFFER][COMMANDBUFFER];
-int position;
+int history_head = 0, history_tail = 0;
+
+char *read_line()
+{
+    char *buffer = (char*)malloc(COMMANDBUFFER * sizeof(char));
+    int pos = 0, c = 0;
+
+    if (buffer == NULL)
+    {
+        printf("zsh: something went wrong when reading input from stdin\n");
+        return NULL;
+    }
+
+    while (1)
+    {
+        c = getchar();
+        if (c == '\n')
+        {
+            buffer[pos] = c;
+            return buffer;
+        }
+        else if (c == EOF)
+        {
+            return buffer;
+        }
+        else
+        {
+            buffer[pos++] = c;
+        }
+
+        if (pos == COMMANDBUFFER)
+        {
+            printf("zsh: command too long\n");
+            return NULL;
+        }
+    }
+}
+
+char **parse_line(char *line)
+{
+    const char *delim = " \t\n";
+    char **args = (char **)malloc(ARGUMENTBUFFER * sizeof(char*));
+    char *arg;
+    int pos = 0;
+
+    arg = strtok(line, delim);
+    while (arg != NULL)
+    {
+        args[pos++] = arg;
+        arg = strtok(NULL, delim);
+    }
+    args[pos] = NULL;
+    return args;
+}
 
 
 int my_ls(char **args)
@@ -63,7 +117,8 @@ int my_ls(char **args)
         args[2] = (char*)"-a";
         args[3] = NULL;
     }
-    else
+    
+    if (args[3] != NULL || (args[2] != NULL && strcmp(args[2], "-a")))
     {
         printf("> ls parameter error.\n");
         return FAILEDID;
@@ -219,6 +274,7 @@ int rmmove_recursively(char *dir)
         }
     }
     remove(dir);
+    return SUCCESSID;
 }
 
 int my_rm(char **args)
@@ -432,7 +488,7 @@ int my_mv(char **args)
         // 如果源文件是目录，调用`my_cp -r src tar`
         for (int i = 4; i >= 2; --i)
             args[i] = args[i - 1];
-        args[1] = "-r";
+        args[1] = (char*)"-r";
         my_cp(args);
 
         // 调用`my_rm -r src`
@@ -458,23 +514,68 @@ int my_mv(char **args)
 
 int my_history(char **args)
 {
-    for (int i = 0; i < position; ++i)
+    int position = history_head, counter = 1;
+    while (position != history_tail)
     {
-        printf("%5d %s\n", i, history[i]);
+        printf("%4d %s\n", counter, history[position]);
+        position = (position + 1) % HISTORYBUFFER;
+        counter += 1;
     }
     return SUCCESSID;
 }
 
+void update_history(char *line)
+{
+    // 将新的输入命令添加到历史缓冲区的尾部
+    int length = strlen(line);
+    strcpy(history[history_tail], line);
+    if (history[history_tail][length - 1] == '\n')
+    {
+        history[history_tail][length - 1] = '\0';
+    }
+    
+    // 尾部指针加1
+    history_tail = (history_tail + 1) % HISTORYBUFFER;
+
+    // 历史缓冲区已满，删除最早的记录
+    if (history_head == history_tail)
+    {
+        history_head = (history_head + 1) % HISTORYBUFFER;
+    }
+
+}
+
+void zsh()
+{
+    while (1)
+    {
+        printf("root@zsh:$ ");
+        char *line = read_line();
+        update_history(line);
+
+        char **args = parse_line(line);
+        int processed = 0;
+        int zsh_func_num = sizeof(shell_funcname) / sizeof(char*);
+        for (int i = 0; i < zsh_func_num; ++i)
+        {
+            if (!strcmp(args[0], shell_funcname[i]))
+            {
+                processed = 1;
+                int ret = (*shell_function[i])(args);
+                break;
+            }
+        }
+
+        if (!strcmp(args[0], "exit"))
+        {
+            break;
+        }
+        if (!processed) printf("%s: command not found\n", args[0]);
+    }
+}
+
 int main()
 {
-    int bufsize = 5, position = 0;
-    char **args = (char**)malloc(bufsize * sizeof(char*));
-    // args[1] = "asdas";
-    // (*shell_function[3])(args);
-    // args[1] = NULL;
-    // (*shell_function[1])(args);
-    args[1] = "a";
-    args[2] = "a.copy";
-    (*shell_function[6])(args);
+    zsh();
     return 0;
 }
