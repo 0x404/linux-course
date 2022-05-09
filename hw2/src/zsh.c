@@ -27,6 +27,8 @@ int my_mkdir(char **args);
 int my_mv(char **args);
 int my_history(char **args);
 
+
+// 当前shell支持的命令名
 char *shell_funcname[] = {
     (char*)"ls",
     (char*)"pwd",
@@ -37,6 +39,7 @@ char *shell_funcname[] = {
     (char*)"mv",
     (char*)"history",
 };
+// 当前shell支持的命令对应的函数指针
 int (*shell_function[]) (char **) = {
   &my_ls,
   &my_pwd,
@@ -48,6 +51,7 @@ int (*shell_function[]) (char **) = {
   &my_history,
 };
 
+// 循环队列，用于存储历史输入信息，最多存储HISTORYBUFFER条命令
 char history[HISTORYBUFFER][COMMANDBUFFER];
 int history_head = 0, history_tail = 0;
 
@@ -253,20 +257,29 @@ void update_history(char *line)
 
 void zsh()
 {
+    // 程序入口
     while (1)
     {
         printf("root@zsh:$ ");
+
+        // step1 读取用户输入
         char *line = read_line();
         if (line == NULL) continue;
+
+        // step2 更新用户命令历史信息
         update_history(line);
 
+        // step3 将输入转成参数形式
         char **args = parse_line(line);
+
+        // step4 遍历当前shell支持的命令，查找用户命令
         int processed = 0;
         int zsh_func_num = sizeof(shell_funcname) / sizeof(char*);
         for (int i = 0; i < zsh_func_num; ++i)
         {
             if (!strcmp(args[0], shell_funcname[i]))
             {
+                // 查找到用户命令，通过函数指针调用对应命令执行
                 processed = 1;
                 int ret = (*shell_function[i])(args);
                 break;
@@ -277,6 +290,8 @@ void zsh()
         {
             break;
         }
+
+        // step5 用户命令未找到，输出提示信息
         if (!processed) printf("%s: command not found\n", args[0]);
     }
 }

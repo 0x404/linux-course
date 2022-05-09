@@ -1,1 +1,5 @@
 **/test*
+gcc/
+**/bin
+**/obj
+.vscode
