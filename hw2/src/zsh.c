@@ -1,3 +1,9 @@
+/*
+ * @author: 1120192092-曾群鸿
+ * @Date: 2022-05-11 19:42:19
+ * @Description: zsh主文件，包括一些较为简单命令的实现以及shell主体控制结构
+ *               更多信息请见`./readme.md`。
+ */
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>

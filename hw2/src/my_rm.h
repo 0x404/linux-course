@@ -1,3 +1,8 @@
+/*
+ * @author: 1120192092-曾群鸿
+ * @Date: 2022-05-11 19:42:19
+ * @Description: rm命令所需要函数的定义，更多信息请见`./readme.md`。
+ */
 #include <unistd.h>
 #include <dirent.h>
 
