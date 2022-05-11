@@ -1,7 +1,7 @@
 #include "my_rm.h"
 #include "utils.h"
 
-int rmmove_recursively(char *dir)
+int remove_recursively(char *dir)
 {
     DIR *current_dir;
     struct dirent *file;
@@ -24,7 +24,7 @@ int rmmove_recursively(char *dir)
         if (is_dir(nex))
         {
             // 目录文件，递归删除
-            rmmove_recursively(nex);
+            remove_recursively(nex);
         }
         else
         {
@@ -44,29 +44,44 @@ int my_rm(char **args)
         printf("rm: requires file path parameter.\n");
         return FAILEDID;
     }
-    
+
     if (!strcmp(args[1], "-r"))
     {
-        if (!is_dir(args[2]))
+        int pos = 2;
+        // 遍历参数，依次进行删除，支持`rm a b c ...`多文件删除
+        while (args[pos] != NULL)
         {
-            // 开启-r选项但不是目录，使用remove删除
-            remove(args[2]);
-        }
-        else
-        {
-            // 开启-r选项且是目录，递归删除
-            rmmove_recursively(args[2]);
+            // 开启`-r`选项，不是目录，使用`remove`系统调用删除
+            if (!is_dir(args[pos]))
+            {
+                remove(args[pos]);
+            }
+            else
+            {
+                // 否则使用递归删除
+                remove_recursively(args[pos]);
+            }
+            pos += 1;
         }
     }
     else
     {
-        // 不开启-r选项，检查待删除路径是否是目录
-        if (is_dir(args[1]))
+        int pos = 1;
+        // 遍历参数，依次进行删除，支持`rm a b c ...`多文件删除
+        while (args[pos] != NULL)
         {
-            printf("rm: cannot remove %s: Is a directory\n", args[1]);
-            return FAILEDID;
+            // 不开启-r选项，检查待删除路径是否是目录
+            if (is_dir(args[pos]))
+            {
+                printf("rm: cannot remove %s: Is a directory\n", args[pos]);
+            }
+            else
+            {
+                remove(args[pos]);
+            }
+            pos += 1;
         }
-        remove(args[1]);
+        
     }
     return SUCCESSID;
 }

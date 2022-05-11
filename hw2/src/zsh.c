@@ -7,6 +7,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <utime.h>
+#include <time.h>
 
 #include "utils.h"
 #include "my_rm.h"
@@ -15,7 +16,7 @@
 #define SUCCESSID 0
 #define FAILEDID 1
 #define HISTORYBUFFER 1024
-#define COMMANDBUFFER 128
+#define COMMANDBUFFER 256
 #define ARGUMENTBUFFER 20
 #define KGRN "\x1B[32m"
 #define RESET "\x1B[0m"
@@ -26,6 +27,7 @@ int my_cd(char **args);
 int my_mkdir(char **args);
 int my_mv(char **args);
 int my_history(char **args);
+int my_touch(char **args);
 
 
 // 当前shell支持的命令名
@@ -38,6 +40,7 @@ char *shell_funcname[] = {
     (char*)"cp",
     (char*)"mv",
     (char*)"history",
+    (char*)"touch",
 };
 // 当前shell支持的命令对应的函数指针
 int (*shell_function[]) (char **) = {
@@ -49,6 +52,7 @@ int (*shell_function[]) (char **) = {
   &my_cp,
   &my_mv,
   &my_history,
+  &my_touch,
 };
 
 // 循环队列，用于存储历史输入信息，最多存储HISTORYBUFFER条命令
@@ -150,32 +154,38 @@ int my_cd(char **args)
 
 int my_mkdir(char **args)
 {
-    // 参数解析，mkdir命令有且仅有一个参数
-    if (args[1] == NULL || args[2] != NULL)
+    // 参数解析，mkdir至少需要一个参数
+    if (args[1] == NULL)
     {
-        printf("> mkdir requires only one parameter.\n");
+        printf("mkdir: missing operand\n");
         return FAILEDID;
     }
-
-    // 使用mkdir系统调用创建目录，并进行错误处理
-    if (mkdir(args[1], S_IRWXU) == -1)
+    
+    int pos = 1, failed = 0;
+    while (args[pos] != NULL)
     {
-        if (errno == EEXIST)
+        // 使用mkdir系统调用创建目录，并进行错误处理
+        if (mkdir(args[pos], S_IRWXU) == -1)
         {
-            // 待创建目录已经存在
-            printf("> directory already exists.\n");
+            if (errno == EEXIST)
+            {
+                // 待创建目录已经存在
+                printf("mkdir: %s directory already exists.\n", args[pos]);
+            }
+            else if (errno == ENAMETOOLONG)
+            {
+                // 待创建目录名过长
+                printf("mkdir: %s directory name too long.\n", args[pos]);
+            }
+            else
+            {
+                printf("mkdir: make %s failed.\n", args[pos]);
+            }
+            failed = 1;
         }
-        else if (errno == ENAMETOOLONG)
-        {
-            // 待创建目录名过长
-            printf("> directory name too long.\n");
-        }
-        else
-        {
-            printf("> mkdir failed.\n");
-        }
-        return FAILEDID;
+        pos += 1;
     }
+    if (failed) return FAILEDID;
     return SUCCESSID;
 }
 
@@ -192,6 +202,10 @@ int my_mv(char **args)
         printf("mv: unkown parameter %s", args[3]);
     }
 
+    if (is_dir(args[2]))
+    {
+        args[2] = next_dir(args[2], args[1]);
+    }
 
     if (is_dir(args[1]))
     {
@@ -253,6 +267,33 @@ void update_history(char *line)
         history_head = (history_head + 1) % HISTORYBUFFER;
     }
 
+}
+
+int my_touch(char **args)
+{
+    // 新增命令，方便在终端中测试`cp`，`mv`， `rm`命令
+    // 支持touch a b c d ...，创建多个文件
+    if (args[1] == NULL)
+    {
+        printf("touch: missing file operand\n");
+        return FAILEDID;
+    }
+
+    int pos = 1;
+    while (args[pos] != NULL)
+    {
+        if (is_file(args[pos]))
+        {
+            printf("touch: %s exists\n", args[pos]);
+        }
+        else
+        {
+            int file = creat(args[pos], 0700);
+            close(file);
+        }
+        pos += 1;
+    }
+    return SUCCESSID;
 }
 
 void zsh()

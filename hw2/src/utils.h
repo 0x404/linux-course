@@ -3,7 +3,7 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 
-#define COMMANDBUFFER 128
+#define COMMANDBUFFER 256
 #define ARGUMENTBUFFER 20
 
 // 判断给定路径是否是一个linux目录
