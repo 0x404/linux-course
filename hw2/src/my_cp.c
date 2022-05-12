@@ -122,6 +122,13 @@ int my_cp(char **args)
     // 开启`-r`递归复制选项
     if (!strcmp(args[1], "-r"))
     {
+        // 复制前先检查源文件或源目录是否存在
+        if (!is_dir(args[2]) && !is_file(args[2]))
+        {
+            printf("cp: cannot stat '%s': No such file or directory\n", args[2]);
+            return FAILEDID;
+        }
+
         if (!is_dir(args[2]))
         {
             // 开启`-r`选项，但不是目录，单文件复制
@@ -129,6 +136,7 @@ int my_cp(char **args)
         }
         else
         {
+            args[3] = next_dir(args[3], args[2]);
             // 开启`-r`选项，且是目录，递归复制
             if (opendir(args[3]) == NULL)
             {
@@ -150,6 +158,13 @@ int my_cp(char **args)
     }
     else
     {
+        // 复制前先检查源文件或源目录是否存在
+        if (!is_dir(args[1]) && !is_file(args[1]))
+        {
+            printf("cp: cannot stat '%s': No such file or directory\n", args[2]);
+            return FAILEDID;
+        }
+
         // 不开启`-r`选项，检查待复制文件是否为目录
         if (is_dir(args[1]))
         {
@@ -158,6 +173,7 @@ int my_cp(char **args)
         }
         else
         {
+            args[2] = next_dir(args[2], args[1]);
             cp_single(args[1], args[2]);
         }
     }

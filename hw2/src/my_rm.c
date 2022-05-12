@@ -56,6 +56,14 @@ int my_rm(char **args)
         // 遍历参数，依次进行删除，支持`rm a b c ...`多文件删除
         while (args[pos] != NULL)
         {
+            // 在删除前先检查目录或者文件是否存在
+            if (!is_dir(args[pos]) && !is_file(args[pos]))
+            {
+                printf("rm: cannot remove '%s': No such file or directory\n", args[pos]);
+                pos += 1;
+                continue;
+            }
+
             // 开启`-r`选项，不是目录，使用`remove`系统调用删除
             if (!is_dir(args[pos]))
             {
@@ -75,6 +83,14 @@ int my_rm(char **args)
         // 遍历参数，依次进行删除，支持`rm a b c ...`多文件删除
         while (args[pos] != NULL)
         {
+            // 在删除前先检查目录或者文件是否存在
+            if (!is_dir(args[pos]) && !is_file(args[pos]))
+            {
+                printf("rm: cannot remove '%s': No such file or directory\n", args[pos]);
+                pos += 1;
+                continue;
+            }
+
             // 不开启-r选项，检查待删除路径是否是目录
             if (is_dir(args[pos]))
             {

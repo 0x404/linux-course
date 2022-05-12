@@ -25,6 +25,8 @@
 #define COMMANDBUFFER 256
 #define ARGUMENTBUFFER 20
 #define KGRN "\x1B[32m"
+#define BLU   "\x1B[34m"
+#define CYN   "\x1B[36m"
 #define RESET "\x1B[0m"
 
 int my_ls(char **args);
@@ -142,17 +144,23 @@ int my_pwd(char **args)
 
 int my_cd(char **args)
 {
-    // 参数解析，cd命令有且仅有一个参数
-    if (args[1] == NULL || args[2] != NULL)
+    // 参数解析，cd命令最多一个参数
+    if (args[2] != NULL)
     {
-        printf("> cd requires only one parameter.\n");
+        printf("cd: too many arguments\n");
         return FAILEDID;
+    }
+
+    // 如果没有给定参数，则跳转到根目录
+    if (args[1] == NULL)
+    {
+        args[1] = (char*)"/";
     }
 
     // chdir系统调用成功返回0，否则返回非0
     if (chdir(args[1]))
     {
-        printf("> change directory failed.\n");
+        printf("cd: change directory failed.\n");
         return FAILEDID;
     }
     return SUCCESSID;
@@ -202,20 +210,22 @@ int my_mv(char **args)
     if (args[1] == NULL || args[2] == NULL)
     {
         printf("mv: requires source path and target path\n");
+        return FAILEDID;
+    }
+    else if (!strcmp(args[1], "-r"))
+    {
+        printf("mv: unkown parameter '%s'\n", args[1]);
+        return FAILEDID;
     }
     else if (args[3] != NULL)
     {
-        printf("mv: unkown parameter %s", args[3]);
+        printf("mv: unkown parameter '%s'\n", args[3]);
+        return FAILEDID;
     }
 
-    if (is_dir(args[2]))
-    {
-        args[2] = next_dir(args[2], args[1]);
-    }
-
+    // 如果源文件是目录，调用`my_cp -r src tar`
     if (is_dir(args[1]))
     {
-        // 如果源文件是目录，调用`my_cp -r src tar`
         for (int i = 4; i >= 2; --i)
             args[i] = args[i - 1];
         args[1] = (char*)"-r";
@@ -236,7 +246,7 @@ int my_mv(char **args)
     }
     else
     {
-        printf("mv: %s not exist\n", args[1]);
+        printf("mv: cannot stat '%s': No such file or directory\n", args[1]);
         return FAILEDID;
     }
     return SUCCESSID;
@@ -302,12 +312,36 @@ int my_touch(char **args)
     return SUCCESSID;
 }
 
+char* get_ls_pwd()
+{
+    // 获取当前所在位置绝对目录的最后一个目录
+    char work_directory[128];
+    char *res = (char*)malloc(128 * sizeof(char));
+    getcwd(work_directory, sizeof(work_directory));
+    int pos1 = strlen(work_directory) - 1, pos2 = 0;
+    while (work_directory[pos1] != '/'){
+        pos1--;
+    }
+    
+    for (int i = pos1 + 1; i < strlen(work_directory); ++i)
+    {
+        res[pos2] = work_directory[i];
+        pos2++;
+    }
+    res[pos2] = '\0';
+
+    return res;
+}
+
 void zsh()
 {
     // 程序入口
     while (1)
     {
-        printf("root@zsh:$ ");
+        // 输出具有颜色的命令提示符
+        printf("root@zsh:");
+        printf(BLU "~%s/", get_ls_pwd());
+        printf(RESET "$ ");
 
         // step1 读取用户输入
         char *line = read_line();
