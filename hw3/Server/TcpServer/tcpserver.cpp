@@ -8,12 +8,6 @@ TCPServer::TCPServer(QObject *parent) : QTcpServer (parent)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-26
- * @Description: 当有一个新的socket连接到服务器上，加入到socket队列中，并监听
- * @Parameters: qintptr 新加入的socket的标识符
- **************************************************************************/
 void TCPServer::incomingConnection(qintptr socketDescriptor)    //当有一个新的socket连接到服务器
 {
     TCPSocket* socket = new TCPSocket();
@@ -29,12 +23,6 @@ void TCPServer::incomingConnection(qintptr socketDescriptor)    //当有一个�
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-26
- * @Description: 当监听到一个socket发送数据包到服务器上，对数据包进行处理
- * @Parameters: QString socket发送到服务器的信息  qintptr 信息来自于哪个socket
- **************************************************************************/
 void TCPServer::messageComing(QString s, qintptr id)    // 服务器接受到标识符为id的socket发送的信息
 {
     qDebug() << "Server get " << s;
@@ -184,12 +172,6 @@ void TCPServer::messageComing(QString s, qintptr id)    // 服务器接受到标
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-27
- * @Description: 客户端请求登录
- * @Parameters: DataPackege* socket发送的数据包  qintptr 该数据包来自哪个socket
- **************************************************************************/
 void TCPServer::requestLogin(DataPackage *pack, qintptr id)
 {
     DataAnalyst transfer;
@@ -226,12 +208,6 @@ void TCPServer::requestLogin(DataPackage *pack, qintptr id)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-27
- * @Description: 客户端请求注册
- * @Parameters: DataPackege* socket发送的数据包  qintptr 该数据包来自哪个socket
- **************************************************************************/
 void TCPServer::requestRegister(DataPackage *pack, qintptr id)
 {
     DataAnalyst transfer;
@@ -253,12 +229,6 @@ void TCPServer::requestRegister(DataPackage *pack, qintptr id)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-27
- * @Description: 客户端请求获取其个人信息
- * @Parameters: DataPackege* socket发送的数据包  qintptr 该数据包来自哪个socket
- **************************************************************************/
 void TCPServer::requestMyInfo(DataPackage *pack, qintptr id)
 {
     DataAnalyst transfer;
@@ -273,12 +243,6 @@ void TCPServer::requestUpdateMotto(DataPackage *pack, qintptr id)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-27
- * @Description: 客户端请求获取好友信息
- * @Parameters: DataPackege* socket发送的数据包  qintptr 该数据包来自哪个socket
- **************************************************************************/
 void TCPServer::requestFriendInfo(DataPackage *pack, qintptr id)
 {
     DataAnalyst transfer;
@@ -297,12 +261,7 @@ void TCPServer::requestFriendInfo(DataPackage *pack, qintptr id)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-27
- * @Description: 客户端请求发送消息
- * @Parameters: DataPackege* socket发送的数据包  qintptr 该数据包来自哪个socket
- **************************************************************************/
+
 void TCPServer::requestSendMessage(DataPackage *pack, qintptr id)   //目前仅支持向在线的用户发送消息
 {
     DataAnalyst transfer;
@@ -318,12 +277,7 @@ void TCPServer::requestSendMessage(DataPackage *pack, qintptr id)   //目前仅�
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-28
- * @Description: 客户端请求获取聊天记录
- * @Parameters: DataPackege* socket发送的数据包  qintptr 该数据包来自哪个socket
- **************************************************************************/
+
 void TCPServer::requestChatHistory(DataPackage *pack, qintptr id)
 {
     DataAnalyst transfer;
@@ -342,12 +296,6 @@ void TCPServer::requestGroupChatHistory(DataPackage *pack, qintptr id)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-28
- * @Description: 客户端请求添加好友
- * @Parameters: DataPackege* socket发送的数据包  qintptr 该数据包来自哪个socket
- **************************************************************************/
 void TCPServer::requestAddFriend(DataPackage *pack, qintptr id)
 {
     DataAnalyst transfer;
@@ -382,12 +330,6 @@ void TCPServer::requestAddFriend(DataPackage *pack, qintptr id)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-28
- * @Description: 客户端通过好友请求，向服务器发送反馈
- * @Parameters: DataPackege* socket发送的数据包  qintptr 该数据包来自哪个socket
- **************************************************************************/
 void TCPServer::requestFriendInviteAccepted(DataPackage *pack, qintptr id)
 {
     //好友请求通过，向数据库写入数据，向在线方重新发送好友数据包，用于更新UI界面
@@ -407,12 +349,6 @@ void TCPServer::requestFriendInviteAccepted(DataPackage *pack, qintptr id)
     }
 }
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-29
- * @Description: 客户端拒绝好友邀请
- * @Parameters: DataPackege* socket发送的数据包  qintptr 该数据包来自哪个socket
- **************************************************************************/
 void TCPServer::requestFriendInviteRejected(DataPackage *pack, qintptr id)
 {
     DataBaseManager::getManager()->sqlRejectAddFriend(pack->parameters[0], pack->parameters[1]);
@@ -420,12 +356,7 @@ void TCPServer::requestFriendInviteRejected(DataPackage *pack, qintptr id)
     requestFriendInfo(tr.optToPackage("requestFriendInfo", {pack->parameters[1]}), id);
 }
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-29
- * @Description: 客户端请求删除好友
- * @Parameters: DataPackege* socket发送的数据包  qintptr 该数据包来自哪个socket
- **************************************************************************/
+
 void TCPServer::requestDeleteFriend(DataPackage *pack, qintptr id)
 {
     DataAnalyst transfer;
@@ -434,12 +365,6 @@ void TCPServer::requestDeleteFriend(DataPackage *pack, qintptr id)
         requestFriendInfo(transfer.optToPackage("requestFriendInfo", {pack->parameters[0]}), id);
 }
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-28
- * @Description: 客户端请求向其发送好友邀请的信息
- * @Parameters: DataPackege* socket发送的数据包  qintptr 该数据包来自哪个socket
- **************************************************************************/
 void TCPServer::requestFriendInviteList(DataPackage *pack, qintptr id)
 {
     DataAnalyst transfer;
@@ -448,12 +373,6 @@ void TCPServer::requestFriendInviteList(DataPackage *pack, qintptr id)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-26
- * @Description: 将一个数据包发送给一个指定id的在线用户
- * @Parameters: DataPackege* 待发送的数据包  int 待接收用户的id
- **************************************************************************/
 void TCPServer::sendToUser(DataPackage *pack, int id)
 {
     for (int i = 0; i < onlineUser.size(); ++i)
@@ -494,12 +413,6 @@ void TCPServer::requestChangeProfile(DataPackage *pack, qintptr id)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-26
- * @Description: 将一个数据包发送给全部在线用户
- * @Parameters: DataPackege* 待发送的数据包
- **************************************************************************/
 void TCPServer::sendToAllUser(DataPackage *pack)
 {
     for (int i = 0; i < onlineUser.size(); ++i)
@@ -511,13 +424,6 @@ void TCPServer::sendToAllUser(DataPackage *pack)
     }
 }
 
-
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-26
- * @Description: 将一个数据包发送给一个指定id的客户端
- * @Parameters: DataPackege* 待发送的数据包  qintptr 带接收数据包的socket的标识符
- **************************************************************************/
 void TCPServer::sendToClient(DataPackage *pack, qintptr id)
 {
     for (int i = 0; i < clientLists.size(); ++i)
@@ -534,12 +440,6 @@ void TCPServer::sendToClient(DataPackage *pack, qintptr id)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-26
- * @Description: 将一个数据包发送给全部客户端
- * @Parameters: DataPackege* 待发送的数据包
- **************************************************************************/
 void TCPServer::sentToAllClient(DataPackage *pack)
 {
     for (int i = 0; i < clientLists.size(); ++i)
@@ -550,12 +450,6 @@ void TCPServer::sentToAllClient(DataPackage *pack)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-26
- * @Description: 当一个socket从服务器上断开连接
- * @Parameters: qintptr 断开连接的socket的标识符
- **************************************************************************/
 void TCPServer::clientDisconnect(qintptr id)
 {
 
@@ -589,12 +483,6 @@ void TCPServer::clientDisconnect(qintptr id)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-26
- * @Description: 判断一个用户是否在线
- * @Parameters: QString 待判断的用户
- **************************************************************************/
 bool TCPServer::userIsOnline(QString userName)
 {
     int userId = DataBaseManager::getManager()->sqlGetIdFromUserName(userName);
@@ -607,12 +495,6 @@ bool TCPServer::userIsOnline(QString userName)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-26
- * @Description: 判断一个用户是否在线
- * @Parameters: int 待判断用户的id
- **************************************************************************/
 bool TCPServer::userIsOnline(int userId)
 {
     for (int i = 0; i < onlineUser.size(); ++i)
@@ -624,12 +506,6 @@ bool TCPServer::userIsOnline(int userId)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-26
- * @Description: 将一个用户强制下线
- * @Parameters: QString 待强制下线的用户名
- **************************************************************************/
 void TCPServer::userOffLine(QString userName)
 {
     int userId = DataBaseManager::getManager()->sqlGetIdFromUserName(userName);
@@ -644,13 +520,6 @@ void TCPServer::userOffLine(QString userName)
     }
 }
 
-
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-26
- * @Description: 将一个用户强制下线
- * @Parameters: int 强制下线的用户id
- **************************************************************************/
 void TCPServer::userOffLine(int userId)
 {
     for (int i = 0; i < onlineUser.size(); ++i)
@@ -665,12 +534,6 @@ void TCPServer::userOffLine(int userId)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-26
- * @Description: 通过用户名获取该用户的socket标识符
- * @Parameters: QString 用户名
- **************************************************************************/
 qintptr TCPServer::descriptorOfUser(QString userName)
 {
     int userId = DataBaseManager::getManager()->sqlGetIdFromUserName(userName);
@@ -685,12 +548,6 @@ qintptr TCPServer::descriptorOfUser(QString userName)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-26
- * @Description: 通过用户id获取该用户的socket标识符
- * @Parameters: int 用户id
- **************************************************************************/
 qintptr TCPServer::descriptorOfUser(int userId)
 {
     for (int i = 0; i < onlineUser.size(); ++i)
