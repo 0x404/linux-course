@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>talkpageMany</class>
+ <widget class="QWidget" name="talkpageMany">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>893</width>
+    <height>687</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QListWidget" name="listWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>30</y>
+     <width>711</width>
+     <height>461</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>690</width>
+     <height>360</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>1000</width>
+     <height>1000</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QListWidget{background-color: rgb(247, 247, 247); color:rgb(51,51,51); border: 1px solid  rgb(247, 247, 247);outline:0px;}
+QListWidget::Item{background-color: rgb(247, 247, 247);}
+QListWidget::Item:hover{background-color: rgb(247, 247, 247); }
+QListWidget::item:selected{
+	background-color: rgb(247, 247, 247);
+	color:black; 
+    border: 1px solid  rgb(247, 247, 247);
+}
+QListWidget::item:selected:!active{border: 1px solid  rgb(247, 247, 247); background-color: rgb(247, 247, 247); color:rgb(51,51,51); } </string>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_2">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>0</y>
+     <width>851</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Agency FB</family>
+     <pointsize>16</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+     <underline>true</underline>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-style:none;
+text-decoration: underline;
+font: 58pt &quot;Agency FB&quot;;
+font: 16pt &quot;Agency FB&quot;;
+padding:1px;
+
+background:transparent;</string>
+   </property>
+   <property name="text">
+    <string>群聊名称</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>490</y>
+     <width>741</width>
+     <height>221</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>200</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>10000000</height>
+    </size>
+   </property>
+   <widget class="QPushButton" name="pushButton_1">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>144</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-radius:15px;
+border: 2px solid ;
+background:transparent;
+border:2px solid ;
+border-color:rgb(18,150,219);
+</string>
+    </property>
+    <property name="text">
+     <string>发送</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_3">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>144</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-radius:15px;
+border: 2px solid ;
+background:transparent;
+border:2px solid ;
+border-color: rgb(205,207,208);
+</string>
+    </property>
+    <property name="text">
+     <string>关闭</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="textEdit">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>10</y>
+      <width>711</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 25 12pt &quot;Microsoft YaHei&quot;;
+border:1px solid ;
+border-color:rgb(18,150,219);
+border-left-width: 0px;
+border-right-width: 0px;
+border-bottom-width:0px;
+</string>
+    </property>
+   </widget>
+   <zorder>textEdit</zorder>
+   <zorder>pushButton_3</zorder>
+   <zorder>pushButton_1</zorder>
+  </widget>
+  <widget class="QListView" name="OnlineView">
+   <property name="geometry">
+    <rect>
+     <x>730</x>
+     <y>30</y>
+     <width>161</width>
+     <height>661</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 25 12pt &quot;Microsoft YaHei&quot;;
+border:1px solid ;
+border-color:rgb(18,150,219);
+border-left-width: 0px;
+border-right-width: 0px;
+border-bottom-width:0px;
+</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>730</x>
+     <y>10</y>
+     <width>61</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>在线列表</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
