@@ -169,6 +169,11 @@ void TCPServer::messageComing(QString s, qintptr id)    // 服务器接受到标
     {
         requestGroupChatHistory(pack, id);
     }
+
+    if (pack->opt == transfer.getOptId("sendFile"))
+    {
+        requestSendFile(pack, id);
+    }
 }
 
 
@@ -276,7 +281,20 @@ void TCPServer::requestSendMessage(DataPackage *pack, qintptr id)   //目前仅�
     DataBaseManager::getManager()->sqlInsertChatHistory(senderName, targetName, content);
 }
 
-
+void TCPServer::requestSendFile(DataPackage *pack, qintptr id)
+{
+    DataAnalyst transfer;
+    QString senderName = pack->parameters[0];
+    QString targetName = pack->parameters[1];
+    QString senderIP = pack->parameters[2];
+    QString targetIP = pack->parameters[3];
+    QString fileName = pack->parameters[4];
+    if (userIsOnline(targetName))
+    {
+        int targetId = DataBaseManager::getManager()->sqlGetIdFromUserName(targetName);
+        sendToUser(transfer.optToPackage("receiveFile", {senderName, targetName, senderIP, targetIP, fileName}), targetId);
+    }
+}
 
 void TCPServer::requestChatHistory(DataPackage *pack, qintptr id)
 {

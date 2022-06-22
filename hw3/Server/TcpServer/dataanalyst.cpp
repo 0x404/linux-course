@@ -13,6 +13,7 @@ DataAnalyst::DataAnalyst()
     // ("requestAddFriend", {userName1, userName2}) 参数长度为2
     // ("accept", {})   参数长度为0
     // ("error", {})    参数长度为0
+    // ("fileComming", {userName, targetName, userIp, targetIp})
     cnt = 0;
     optSet = std::vector<QString>{ "message", "messageAccepted", "messageError",
                                    "login", "loginAccepted", "loginError",
@@ -26,7 +27,7 @@ DataAnalyst::DataAnalyst()
                                    "deleteFriend", "requestUpdateMotto",
                                    "formatError", "groupMessage", "requestAllUser",
                                    "receiveAllUser", "requestChangeProfile",
-                                   "requestGroupChatHistory", "receiveGroupChatHistory" };
+                                   "requestGroupChatHistory", "receiveGroupChatHistory", "sendFile", "receiveFile"};
     for (auto x : optSet)
         optMp[x] = cnt++;
 }

@@ -54,6 +54,7 @@ protected:
     void requestAllUser(DataPackage*, qintptr);               // 客户端请求所有用户
     void requestChangeProfile(DataPackage*, qintptr);         // 客户端请求更换头像
     void requestGroupChatHistory(DataPackage*, qintptr);      // 客户端请求群聊聊天记录
+    void requestSendFile(DataPackage*, qintptr);              // 客户端请求发送文件
 };
 
 #endif // TCPSERVER_H

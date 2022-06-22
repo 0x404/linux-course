@@ -122,12 +122,33 @@ border-color:rgb(18,150,219);
      <string>发送</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_4">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>80</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-radius:15px;
+border: 2px solid ;
+background:transparent;
+border:2px solid ;
+
+</string>
+    </property>
+    <property name="text">
+     <string>文件</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QListWidget" name="listWidget">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>30</y>
+     <x>0</x>
+     <y>-20</y>
      <width>690</width>
      <height>411</height>
     </rect>

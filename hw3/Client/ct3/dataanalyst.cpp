@@ -13,6 +13,7 @@ DataAnalyst::DataAnalyst()
     // ("requestAddFriend", {userName1, userName2}) 参数长度为2
     // ("accept", {})   参数长度为0
     // ("error", {})    参数长度为0
+    // ("fileComming", {userName, targetName, userIp, targetIp})
     cnt = 0;
     optSet = std::vector<QString>{ "message", "messageAccepted", "messageError",
                                    "login", "loginAccepted", "loginError",
@@ -26,17 +27,12 @@ DataAnalyst::DataAnalyst()
                                    "deleteFriend", "requestUpdateMotto",
                                    "formatError", "groupMessage", "requestAllUser",
                                    "receiveAllUser", "requestChangeProfile",
-                                   "requestGroupChatHistory", "receiveGroupChatHistory" };
+                                   "requestGroupChatHistory", "receiveGroupChatHistory", "sendFile", "receiveFile"};
     for (auto x : optSet)
         optMp[x] = cnt++;
 }
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-25
- * @Description: 将一个操作转化成QString的格式，用于socket通信
- * @Parameters: QString 操作名     cmd命令参数
- **************************************************************************/
+
 QString DataAnalyst::optToQString(QString opt, std::vector<QString> cmd)
 {
     if (!optExist(opt)) //非法操作
@@ -56,12 +52,7 @@ QString DataAnalyst::optToQString(QString opt, std::vector<QString> cmd)
     return res;
 }
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-25
- * @Description: 将一个QString转成对应的数据包
- * @Parameters: QString 待转换的QString
- **************************************************************************/
+
 DataPackage* DataAnalyst::QStringToPackage(QString s)
 {
     QStringList sList = s.split("$");
@@ -76,12 +67,7 @@ DataPackage* DataAnalyst::QStringToPackage(QString s)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-25
- * @Description: 将一个数据包转成对应的QString
- * @Parameters: DataPackage* 带转换的数据包
- **************************************************************************/
+
 QString DataAnalyst::packageToQString(DataPackage * pack)
 {
     QString res = digitToQString(pack->opt) + "$";
@@ -97,60 +83,33 @@ QString DataAnalyst::packageToQString(DataPackage * pack)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-25
- * @Description: 将一个操作转成数据包，调用optToQString和QStringToPackage来完成
- * @Parameters: QSring 操作名  vec 操作参数
- **************************************************************************/
+
 DataPackage* DataAnalyst::optToPackage(QString opt, std::vector<QString> vec)
 {
     return QStringToPackage(optToQString(opt, vec));
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-25
- * @Description: 返回一个错误类型的数据包
- * @Parameters: QString 错误类型
- **************************************************************************/
+
 DataPackage* DataAnalyst::errorPackage(QString error)
 {
     return new DataPackage(optMp[error], 0, {});
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-25
- * @Description: 返回一个接受类型的数据包
- * @Parameters: QString 接受类型
- **************************************************************************/
 DataPackage* DataAnalyst::acceptPackage(QString acp)
 {
     return new DataPackage(optMp[acp], 0, {});
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-25
- * @Description: 获取操作对应的ID
- * @Parameters: QString 操作名
- **************************************************************************/
+
 int DataAnalyst::getOptId(QString s)
 {
    return optMp[s];
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-25
- * @Description: 实现QString和int类型之间的互相转化
- * @Parameters:
- **************************************************************************/
 QString DataAnalyst::digitToQString(int x)
 {
     return QString::number(x);
@@ -162,12 +121,6 @@ int DataAnalyst::QStringToDigit(QString s)
 }
 
 
-/**************************************************************************
- * @author: 曾群鸿
- * @Date: 2021-8-25
- * @Description: 判断一个操作是否存在于当前系统支持的操作集中
- * @Parameters: QString 操作名
- **************************************************************************/
 bool DataAnalyst::optExist(QString opt)
 {
     return optMp.count(opt);

@@ -36,7 +36,9 @@ SOURCES += \
     talkpage.cpp \
     talkmessage.cpp \
     talkpagemany.cpp \
-    talkmessagmany.cpp
+    talkmessagmany.cpp \
+    file_sender.cpp \
+    file_receiver.cpp
 
 HEADERS += \
     datapackage.h \
@@ -49,7 +51,9 @@ HEADERS += \
     talkpage.h \
     talkmessage.h \
     talkpagemany.h \
-    talkmessagmany.h
+    talkmessagmany.h \
+    file_sender.h \
+    file_receiver.h
 
 FORMS += \
     register.ui \
@@ -57,7 +61,9 @@ FORMS += \
     add_friend.ui \
     mainwindow.ui \
     talkpage.ui \
-    talkpagemany.ui
+    talkpagemany.ui \
+    file_sender.ui \
+    file_receiver.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

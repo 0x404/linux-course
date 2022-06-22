@@ -3,6 +3,7 @@
 
 #include <QWidget>
 
+
 class QPaintEvent;
 class QPainter;
 class Qlabel;

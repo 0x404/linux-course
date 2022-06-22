@@ -2,8 +2,10 @@
 #define TALKPAGE_H
 
 #include <QWidget>
-#include<QListWidgetItem>
-#include"talkmessage.h"
+#include <QListWidgetItem>
+#include "talkmessage.h"
+#include "file_sender.h"
+#include "file_receiver.h"
 #include <QDialog>
 
 
@@ -32,12 +34,15 @@ private slots:
     void getDataFromServer();
     void on_pushButton_3_clicked();
 
+    void on_pushButton_4_clicked();
+
 private:
     QString icon_other;
     QString icon_self;
     QString id_self;
     QString id_other;
     Ui::talkpage *ui;
+    file_sender *sender;
 };
 
 #endif // TALKPAGE_H

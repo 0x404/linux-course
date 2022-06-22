@@ -22,6 +22,7 @@ talkpage::talkpage(QWidget *parent,QString str, QString pic) :
     ui->pushButton_2->setText(str);
     connect(common::getSocket(), SIGNAL(readyRead()), this, SLOT(getDataFromServer()));
     DataAnalyst tr;
+    sender = new file_sender(this, userName);
     common::getSocket()->write(tr.optToQString("requestChatHistory", {common::userName, userName}).toUtf8());
 }
 
@@ -33,10 +34,10 @@ talkpage::~talkpage()
 
 void talkpage::getDataFromServer()
 {
-    DataAnalyst tr;
+    DataAnalyst translator;
     QString input = common::getSocket()->readAll();
-    DataPackage *pack = tr.QStringToPackage(input);
-    if (pack->opt == tr.getOptId("message"))
+    DataPackage *pack = translator.QStringToPackage(input);
+    if (pack->opt == translator.getOptId("message"))
     {
         QString time = QString::number(QDateTime::currentDateTime().toTime_t()); //时间戳
         showTime(time);
@@ -46,7 +47,7 @@ void talkpage::getDataFromServer()
         ui->listWidget->setCurrentRow(ui->listWidget->count()-1);
     }
 
-    if (pack->opt == tr.getOptId("receiveChatHistory"))
+    if (pack->opt == translator.getOptId("receiveChatHistory"))
     {
         std::vector<std::vector<QString>> history;
         std::vector<QString> tmp;
@@ -76,8 +77,28 @@ void talkpage::getDataFromServer()
             ui->listWidget->setCurrentRow(ui->listWidget->count()-1);
         }
     }
-}
 
+    if (pack->opt == translator.getOptId("receiveFile"))
+    {
+        QString sender = pack->parameters[0];
+        QString receiver = pack->parameters[1];
+        QString senderIP = pack->parameters[2];
+        QString receiverIP = pack->parameters[3];
+        QString fileName = pack->parameters[4];
+        int btn = QMessageBox::information(this,tr("接收文件"),tr("来自 %1 (%2)的文件:%3","是否接受").arg(sender).arg(senderIP).arg(fileName),QMessageBox::Yes,QMessageBox::No);
+        if(btn == QMessageBox::Yes)
+        {
+            QString name = QFileDialog::getSaveFileName(0,tr("保存文件"),fileName);
+            if(!name.isEmpty())
+            {
+                file_receiver *client = new file_receiver(this);
+                client->setFileName(name);
+                client->setHostAddress(QHostAddress(senderIP));
+                client->show();
+            }
+        }
+    }
+}
 
 void talkpage::showTime(QString time)
 {
@@ -169,3 +190,9 @@ void talkpage::on_pushButton_3_clicked()
 }
 
 
+
+void talkpage::on_pushButton_4_clicked()
+{
+    sender->show();
+    sender->initServer();
+}
