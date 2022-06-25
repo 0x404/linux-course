@@ -41,11 +41,11 @@
 
 * 删除好友功能
 
-* <img src="http://image-hosting-404.oss-cn-beijing.aliyuncs.com/img/image-20220623145614453.png" alt="image-20220623145614453" style="zoom:67%;" />
+* <img src="http://image-hosting-404.oss-cn-beijing.aliyuncs.com/img/image-20220623145614453.png" alt="image-20220623145614453" style="zoom: 50%;" />
 
-* <img src="http://image-hosting-404.oss-cn-beijing.aliyuncs.com/img/image-20220623145927219.png" alt="image-20220623145927219" style="zoom:67%;" />
+* <img src="http://image-hosting-404.oss-cn-beijing.aliyuncs.com/img/image-20220623145927219.png" alt="image-20220623145927219" style="zoom: 50%;" />
 
-* <img src="http://image-hosting-404.oss-cn-beijing.aliyuncs.com/img/image-20220623150003008.png" alt="image-20220623150003008" style="zoom:67%;" />
+* <img src="http://image-hosting-404.oss-cn-beijing.aliyuncs.com/img/image-20220623150003008.png" alt="image-20220623150003008" style="zoom: 50%;" />
 
   
 
@@ -56,14 +56,14 @@
 * **文件传输**
 * 支持**群聊系统**
   * 多人群聊，显示当前聊天室中所有用户
-* <img src="http://image-hosting-404.oss-cn-beijing.aliyuncs.com/img/image-20220623150237418.png" alt="image-20220623150237418" style="zoom:67%;" />
-* <img src="http://image-hosting-404.oss-cn-beijing.aliyuncs.com/img/image-20220623150610754.png" alt="image-20220623150610754" style="zoom:50%;" />
-* <img src="http://image-hosting-404.oss-cn-beijing.aliyuncs.com/img/image-20220623150740743.png" alt="image-20220623150740743" style="zoom:67%;" />
-* <img src="http://image-hosting-404.oss-cn-beijing.aliyuncs.com/img/image-20220623150759452.png" alt="image-20220623150759452" style="zoom:67%;" />
+* <img src="C:\Users\87120\AppData\Roaming\Typora\typora-user-images\image-20220625110915442.png" alt="image-20220625110915442" style="zoom: 50%;" />
+* <img src="http://image-hosting-404.oss-cn-beijing.aliyuncs.com/img/image-20220623150610754.png" alt="image-20220623150610754" style="zoom: 50%;" />
+* <img src="C:\Users\87120\AppData\Roaming\Typora\typora-user-images\image-20220625110748874.png" alt="image-20220625110748874" style="zoom: 50%;" />
+* <img src="C:\Users\87120\AppData\Roaming\Typora\typora-user-images\image-20220625110830032.png" alt="image-20220625110830032" style="zoom:50%;" />
 
 
 
-
+<div STYLE="page-break-after: always;"></div>
 
 ## 2. 设计方案📌
 
@@ -129,6 +129,8 @@
   * ...
 * 上述描述过程如下图所示：![image-20220623182119524](http://image-hosting-404.oss-cn-beijing.aliyuncs.com/img/image-20220623182119524.png)
 
+<div STYLE="page-break-after: always;"></div>
+
 ### 2.2 客户端💻
 
 客户端相对服务器端，比较复杂的是各种功能的UI界面操作。根据不同功能之间的交互将其相对解耦成几个模块，其架构图如下所示，**我们在客户端中主要介绍各种功能的实现思路**：![image-20220623155230989](http://image-hosting-404.oss-cn-beijing.aliyuncs.com/img/image-20220623155230989.png)
@@ -168,6 +170,8 @@
 * 文件发送者在发现有新的连接加入后，就向指定的`Socket`发送数据，完成文件的传输
 * ![image-20220623205135138](http://image-hosting-404.oss-cn-beijing.aliyuncs.com/img/image-20220623205135138.png)
 
+<div STYLE="page-break-after: always;"></div>
+
 
 
 ## 3. 特色与创新✨
@@ -178,15 +182,19 @@
 * 我们支持完善的好友系统，支持**好友搜索**，**好友申请**，**好友删除**，还能根据好友的**在线离线状态给予细节的显示**
 * 我们在支持群聊和私聊的基础上，增加了**通讯内容备份的自然展示**（不需要点击查看），**聊天气泡窗口**，并且还有在**群聊界面显示当前聊天室中的所有用户名**
 
+<div STYLE="page-break-after: always;"></div>
+
 
 
 ## 4. 扩展讨论🚀
 
-* 本次作业我们遇到的**最大的困难**是后面改为线上教学以及大三下半学期的考试时间压力，没有充足的时间去完成一个功能丰富的软件。本次作业我们并不是从零实现的，**UI界面和数据库处理部分使用了我们之前写的大三小学期课程设计**；在之前写的基础上更容易进行分工和扩展，优化了各种基本功能的细节，删去原先不合理的设计，并进行了如文件传输，群聊，聊天气泡等功能扩展
+* 本次作业我们遇到的**最大的困难**是后面改为线上教学以及大三下半学期的考试时间压力，没有充足的时间去完成一个功能丰富的软件。本次作业我们并不是从零实现的，**UI界面和数据库处理部分使用了我们之前写的大三小学期课程设计**；我们在之前的基础上进行分工和扩展，优化了各种基本功能的细节，删去原先不合理的设计，并进行功能扩展，如好友添加，文件传输，群聊，聊天气泡等功能
 * 在定义传输数据格式时，其实要考虑的问题应该有很多，我们简单地使用了`$`进行分割，**无法真正做到透明传输**；并且在`DataAnalyst`的设计中不够完善，理论上来说应该使用一个单例类来完成数据的格式解析，并且需要在客户端和服务端保持代码的一致才能保证数据传输的正确性
 * 我们在设计服务器的时候**没有考虑到多进程的问题**，由于我们采用的是`C/S`架构，因此服务器理论上会有很大的处理压力；在高并发请求的情况下会导致错误出现，进一步实现应该将服务器的请求和对数据库的操作改为支持多进程，以**保证在大量请求下的正确性和性能**
 
 
+
+<div STYLE="page-break-after: always;"></div>
 
 
 
@@ -194,5 +202,5 @@
 
 * 1120192092-曾群鸿：**贡献度$40\%$**，主要完成服务端功能的实现和数据传输实现，实现客户端与服务端的通信对接
 * 1120193205-张鹏杰：**贡献度$20\%$**，主要完成数据库的封装，头像，好友列表，好友申请的客户端实现
-* 1120190482-李锡汶：**贡献度$20\%$**，主要完成UI界面的系统迁移和修改，登录，聊天界面，签名的客户端实现
-* 1820191147-温迪：**贡献度$20\%$**，主要完成文件传输的实现，群聊界面和部分好友系统的客户端实现
+* 1120190482-李锡汶：**贡献度$20\%$**，主要完成UI界面的系统迁移和修改，登录，私聊，签名的客户端实现
+* 1820191147-温迪：**贡献度$20\%$**，主要完成文件传输的实现，群聊和部分好友系统的客户端实现
