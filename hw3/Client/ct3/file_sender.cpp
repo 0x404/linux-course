@@ -1,14 +1,7 @@
 #include "file_sender.h"
 #include "ui_file_sender.h"
 #include <QDebug>
-file_sender::file_sender(QWidget *parent, QString talkTo) :
-    QDialog(parent),
-    ui(new Ui::TcpServer),
-    localFile(nullptr),
-    tcpServer(nullptr),
-    clientConnection(nullptr),
-    talkto(talkTo),
-    tcpPort(8888)
+file_sender::file_sender(QWidget *parent, QString talkTo) : QDialog(parent), ui(new Ui::TcpServer), localFile(nullptr), tcpServer(nullptr), clientConnection(nullptr), talkto(talkTo), tcpPort(8888)
 {
     ui->setupUi(this);
     tcpServer = new QTcpServer(this);
@@ -41,7 +34,7 @@ void file_sender::sendFile()
     ui->sendBth->setEnabled(false);
     clientConnection = tcpServer->nextPendingConnection();
     connect(clientConnection,SIGNAL(bytesWritten(qint64)),this,SLOT(updateClientProgress(qint64)));
-    ui->serverStatusLabel->setText(tr("开始传送文件:\n %1!").arg(theFileName));
+    ui->serverStatusLabel->setText(tr("发送文件:\n %1!").arg(theFileName));
     qDebug() << clientConnection->peerAddress().toString();
     qDebug() << clientConnection->peerPort();
     localFile = new QFile(fileName);
@@ -88,8 +81,8 @@ void file_sender::updateClientProgress(qint64 numBytes)
 
     float useTime = time.elapsed();
     double speed = bytesWritten / useTime;
-    ui->serverStatusLabel->setText(tr("已发送 %1MB( %2MB/s)"
-                                      "\n共%3MB 已用时:%4秒\n估计剩余时间:%5秒")
+    ui->serverStatusLabel->setText(tr("当前已经发送 %1MB(速度%2MB/s)"
+                                      "\n文件共%3MB 已用时:%4秒\n剩余时间:%5秒")
                                    .arg(bytesWritten / (1024*1024))
                                    .arg(speed * 1000 /(1024*1024),0,'f',2)
                                    .arg(TotalBytes /(1024*1024))
@@ -99,7 +92,7 @@ void file_sender::updateClientProgress(qint64 numBytes)
     {
         localFile->close();
         tcpServer->close();
-        ui->serverStatusLabel->setText(tr("传送文件: %1成功").arg(theFileName));
+        ui->serverStatusLabel->setText(tr("发送文件%1成功").arg(theFileName));
     }
 }
 
@@ -136,7 +129,7 @@ void file_sender::on_sendBth_clicked()
         return ;
     }
     ui->sendBth->setEnabled(false);
-    ui->serverStatusLabel->setText(tr("等待对方的接受......"));
+    ui->serverStatusLabel->setText(tr("等待对方响应"));
     DataAnalyst tr;
     theFileName = fileName.right(fileName.size()-fileName.lastIndexOf('/')-1);
     common::getSocket()->write(tr.optToQString("sendFile", {common::userName, talkto, "127.0.0.1", "127.0.0.1", theFileName}).toUtf8());

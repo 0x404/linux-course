@@ -8,5 +8,6 @@ DataPackage::DataPackage(int op, int len, std::vector<QString> cmd)
 
 bool DataPackage::isCompleted()
 {
+    // 检查数据包是否完整
     return length == parameters.size();
 }

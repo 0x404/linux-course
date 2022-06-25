@@ -16,9 +16,9 @@ public:
     ~Register();
 
 private slots:
-    void on_registerBtn_clicked();
-    void getData();
-    void on_registerBtn_2_clicked();
+    void getData(); // 监听服务器发送数据，并完成对应事件解析
+    void on_registerBtn_clicked();      // 当用户点击注册按钮
+    void on_registerBtn_2_clicked();    // 当用户点击退出按钮
 
 private:
     Ui::Register *ui;

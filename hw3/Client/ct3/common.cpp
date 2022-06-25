@@ -10,6 +10,7 @@ common::common()
 
 QTcpSocket* common::getSocket()
 {
+    // socket单例设计，保证唯一
     if (socket == nullptr)
         socket = new QTcpSocket();
     return socket;

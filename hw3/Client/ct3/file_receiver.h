@@ -34,17 +34,17 @@ class file_receiver : public QDialog
 public:
     explicit file_receiver(QWidget *parent = 0);
     ~file_receiver();
-    void setFileName(QString fileName);
-    void setHostAddress(QHostAddress address);
+    void setFileName(QString fileName);         // 设置待接收文件名
+    void setHostAddress(QHostAddress address);  // 设置发送方的IP地址
     void closeEvent(QCloseEvent *);
     QFile *localFile;
 
 private slots:
-    void on_tcpClientCancleBtn_clicked();
-    void on_tcpClientCloseBtn_clicked();
-    void readMessage();
+    void on_tcpClientCancleBtn_clicked();       // 当用户点击取消按钮
+    void on_tcpClientCloseBtn_clicked();        // 当用户点击关闭按钮
+    void readMessage();                         // 当监听到有数据发送到本客户端，处理接收信息
+    void connectToHost();                       // 连接到发送端服务器
     void displayError(QAbstractSocket::SocketError);
-    void newConnect();
 
 private:
     Ui::TcpClient *ui;

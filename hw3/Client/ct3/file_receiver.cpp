@@ -3,15 +3,7 @@
 
 #include <QDebug>
 
-file_receiver::file_receiver(QWidget *parent) :
-    QDialog(parent),
-    tcpClient(nullptr),
-    localFile(nullptr),
-    TotalBytes(0),
-    bytesReceived(0),
-    fileNameSize(0),
-    tcpPort(8888),
-    ui(new Ui::TcpClient)
+file_receiver::file_receiver(QWidget *parent) :QDialog(parent), tcpClient(nullptr), localFile(nullptr), TotalBytes(0), bytesReceived(0), fileNameSize(0), tcpPort(8888), ui(new Ui::TcpClient)
 {
     ui->setupUi(this);
     tcpClient = new QTcpSocket(this);
@@ -32,11 +24,12 @@ void file_receiver::setFileName(QString fileName)
 void file_receiver::setHostAddress(QHostAddress address)
 {
     hostAddress = address;
-    newConnect();
+    connectToHost();
 }
 
-void file_receiver::newConnect()
+void file_receiver::connectToHost()
 {
+    // 连接到服务器发过来的发送者IP和端口
     blockSize = 0;
     tcpClient->abort();
     tcpClient->connectToHost(hostAddress,tcpPort);
@@ -79,12 +72,12 @@ void file_receiver::readMessage()
     ui->progressBar->setValue(bytesReceived);
 
     double speed = bytesReceived / useTime;
-    ui->tcpClientStatusLabel->setText(tr("已接收 %1MB( %2MB/s)\n共%3MB 已用时:%4秒\n估计剩余时间:%5秒").arg(bytesReceived / (1024*1024)).arg(speed *1000/(1024*1024),0,'f',2).arg(TotalBytes / (1024*1024)).arg(useTime/1000,0,'f',0).arg(TotalBytes/speed/1000 - useTime/1000,0,'f',0 ));
+    ui->tcpClientStatusLabel->setText(tr("当前已经受到 %1MB(速度%2MB/s)\n文件共%3MB 已用时:%4秒\n剩余时间:%5秒").arg(bytesReceived / (1024*1024)).arg(speed *1000/(1024*1024),0,'f',2).arg(TotalBytes / (1024*1024)).arg(useTime/1000,0,'f',0).arg(TotalBytes/speed/1000 - useTime/1000,0,'f',0 ));
     if(bytesReceived == TotalBytes)
     {
        localFile ->close();
        tcpClient->close();
-       ui->tcpClientStatusLabel->setText(tr("接收文件: %1完毕").arg(fileName));
+       ui->tcpClientStatusLabel->setText(tr("文件%1接受成功").arg(fileName));
     }
 }
 

@@ -142,35 +142,6 @@ void talkpage::on_pushButton_1_clicked()
     QString msg = ui->textEdit->toPlainText();
     ui->textEdit->setText("");
     QString time = QString::number(QDateTime::currentDateTime().toTime_t()); //时间戳
-
-//    bool isSending = true; // 发送中
-//    if(ui->listWidget->count()%2) {
-//        if(isSending) {
-//            showTime(time);
-//            talkmessage* message = new talkmessage(ui->listWidget->parentWidget());
-//            QListWidgetItem* item = new QListWidgetItem(ui->listWidget);
-//            sendMessage(message, item, msg, time, talkmessage::user_self);
-
-//        }
-//        else {
-//            bool isOver = true;
-//            for(int i = ui->listWidget->count() - 1; i > 0; i--)
-//            {
-//                talkmessage* message = (talkmessage*)ui->listWidget->itemWidget(ui->listWidget->item(i));
-//                if(message->gettext() == msg) {
-//                    isOver = false;
-
-//                }
-//            }
-//            if(isOver) {
-//                showTime(time);
-//                talkmessage* message = new talkmessage(ui->listWidget->parentWidget());
-//                QListWidgetItem* item = new QListWidgetItem(ui->listWidget);
-//                sendMessage(message, item, msg, time, talkmessage::user_self);
-
-//            }
-//        }
-//    }
         if(msg != "") {
             showTime(time);
             talkmessage* message = new talkmessage(ui->listWidget->parentWidget(), profile, common::profile);

@@ -23,17 +23,16 @@ public:
 
     void showTime(QString time);
     void sendMessage(talkmessage *messageW, QListWidgetItem *item, QString text, QString time, talkmessage::msg_type type);//发送对话使用该函数
-    void setOtherIcon(QString icon) { icon_other=icon; }
-    void setSelfIcon(QString icon) { icon_self=icon; }
-    void setSelfid(QString id) { id_self=id; }
-    void setOtherid(QString id) { id_other=id; }
+    void setOtherIcon(QString icon) { icon_other=icon; }    // 设置对话方的头像
+    void setSelfIcon(QString icon) { icon_self=icon; }      // 设置自己的头像
+    void setSelfid(QString id) { id_self=id; }              // 设置自己的IO
+    void setOtherid(QString id) { id_other=id; }            // 设置对话方的ID
     QString userName;
     QString profile;
 private slots:
+    void getDataFromServer();           // 从服务器获取数据报时的事件解析函数
     void on_pushButton_1_clicked();
-    void getDataFromServer();
     void on_pushButton_3_clicked();
-
     void on_pushButton_4_clicked();
 
 private:

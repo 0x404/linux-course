@@ -24,6 +24,7 @@
 #include <QDateTime>
 #include "dataanalyst.h"
 #include "common.h"
+
 namespace Ui {
 class TcpServer;
 }
@@ -41,14 +42,10 @@ public:
 protected:
     void closeEvent(QCloseEvent *);
 
-signals:
-    void sendFileName(QString);
-
 private slots:
 
     void on_openBtn_clicked();
     void on_sendBtn_clicked();
-//    void on_serverCloseBtn_clicked();
     void sendFile();
     void updateClientProgress(qint64 );
     void on_openBth_clicked();
