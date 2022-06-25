@@ -65,6 +65,21 @@
 
 <div STYLE="page-break-after: always;"></div>
 
+## 2. 使用方法📖
+
+* 操作系统：[Ubuntu 20.04](https://linuxconfig.org/ubuntu-20-04-download)
+* IDE：[QTCreator](https://www.qt.io/zh-cn/development-tools)
+* 使用`QTCreator`打开`src/server/TcpServer.pro`和`src/client/ct3.pro`，然后运行项目即可
+* **注意**：
+  * 请先运行`Server`，并点击`Server`上的`activate`按钮，然后在运行客户端；否则客户端无法连接服务器，导致客户端无法使用
+  * 默认数据库为空，所以请先注册账号
+
+
+
+<div STYLE="page-break-after: always;"></div>
+
+
+
 ## 2. 设计方案📌
 
 本作业采用经典的**C/S模型**，分别实现服务器和客户端实现，基本架构如下所示：![image-20220623151531075](http://image-hosting-404.oss-cn-beijing.aliyuncs.com/img/image-20220623151531075.png)

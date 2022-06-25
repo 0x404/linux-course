@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>bgp.png</file>
+        <file>bitbug_favicon.ico</file>
+        <file>onlinepage_bgp.jpg</file>
+        <file>registerpic.png</file>
+    </qresource>
+</RCC>
